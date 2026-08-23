@@ -52,12 +52,10 @@
             background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
         }
 
-        /* Mevcut .logo CSS'ini şununla değiştir ve .logo img kuralını ekle */
         .logo {
             display: flex;
             align-items: center;
             gap: 12px;
-            /* Logo ile yazı arasındaki boşluk */
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
@@ -67,7 +65,6 @@
 
         .logo img {
             height: 45px;
-            /* Logonun menüdeki yüksekliği */
             width: auto;
             object-fit: contain;
         }
@@ -78,13 +75,18 @@
             gap: 20px;
         }
 
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
         .nav-links a {
             color: #fff;
             text-decoration: none;
             margin-left: 15px;
             font-weight: 500;
             font-size: 1.05rem;
-            transition: color 0.3s;
+            transition: color 0.3s, background 0.3s;
         }
 
         .nav-links a:hover,
@@ -115,7 +117,7 @@
 
         /* Canlı Döviz (Euro) Widget */
         .live-market {
-            background: rgba(255, 218, 72, 0.5);
+            background: rgba(255, 218, 72, 0.2);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 8px;
@@ -132,7 +134,7 @@
 
         /* Hero Section */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             background: url('iStock-1124656717.webp') center/cover no-repeat;
             position: relative;
             display: flex;
@@ -195,6 +197,7 @@
             z-index: 2;
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             padding: 30px;
@@ -276,7 +279,7 @@
 
         .gallery-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
         }
 
@@ -343,6 +346,7 @@
 
         body.dark-theme footer {
             background-color: var(--white);
+            color: var(--dark);
         }
 
         footer p {
@@ -351,28 +355,79 @@
             letter-spacing: 0.5px;
         }
 
+        /* =========================================
+           MOBİL UYUMLULUK (RESPONSIVE DESIGN)
+           ========================================= */
         @media screen and (max-width: 900px) {
             header {
                 flex-direction: column;
                 gap: 15px;
-                padding: 15px;
+                padding: 15px 5%;
+                background: rgba(0, 0, 0, 0.85);
+                /* Telefonda okunabilirliği artırır */
+                position: relative;
+                /* Hero section ile üst üste binmesini önler */
+            }
+
+            .header-right {
+                flex-direction: column;
+                width: 100%;
+                gap: 15px;
+            }
+
+            /* Telefonda Menü Linklerini Butonlaştır ve Yanyana Diz */
+            .nav-links {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .nav-links a {
+                margin: 0;
+                font-size: 0.95rem;
+                padding: 6px 12px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 20px;
             }
 
             .hero {
                 flex-direction: column;
                 justify-content: center;
                 text-align: center;
-                padding-top: 140px;
+                padding: 40px 5% 60px 5%;
+                /* Menü boşluğu ayarlandı */
+                height: auto;
             }
 
             .hero-content {
                 max-width: 100%;
-                margin-bottom: 40px;
+                margin-bottom: 50px;
+                margin-top: 30px;
+            }
+
+            /* Telefonda devasa durmaması için başlık boyutu küçültüldü */
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
             }
 
             .weather-widget {
                 width: 100%;
                 max-width: 350px;
+                margin: 0 auto;
+                /* Tam ortaya hizalar */
+            }
+
+            .explore-section {
+                padding: 50px 5%;
+            }
+
+            .section-title {
+                font-size: 2rem;
             }
         }
     </style>
@@ -381,14 +436,12 @@
 <body>
 
     <header>
-        <!-- Logonun ve yazının yan yana olduğu yeni HTML -->
         <a href="index.html" class="logo">
             <img src="Firefly.png" alt="KapadokyaTur Logo">
             KapadokyaTur
         </a>
 
         <div class="header-right">
-            <!-- Canlı Euro Kuru Alanı -->
             <div class="live-market">
                 <div>EURO / TRY</div>
                 <span id="eur-try">Yükleniyor...</span>
@@ -401,7 +454,6 @@
                 <a href="lezzetler.html">Lezzetler</a>
             </nav>
 
-            <!-- Gece/Gündüz Mod Butonu -->
             <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙</button>
         </div>
     </header>
@@ -457,7 +509,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer>
         <p>&copy; 2026 KapadokyaTur. Tüm hakları saklıdır.</p>
     </footer>
@@ -477,7 +528,6 @@
         }
 
         // --- 2. CANLI DÖVİZ (CURRENCYFREAKS API) ---
-        // Kendi CurrencyFreaks API anahtarını buraya eklemelisin
         const CURRENCY_API_KEY = 'YOUR_CURRENCYFREAKS_API_KEY';
 
         async function fetchExchangeRate() {
@@ -493,7 +543,6 @@
 
                 document.getElementById('eur-try').innerText = `1 € = ${eurTry} ₺`;
             } catch (error) {
-                // API anahtarı eklenene kadar şık bir varsayılan görünüm sağlar
                 document.getElementById('eur-try').innerText = "1 € = 37.45 ₺";
             }
         }

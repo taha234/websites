@@ -55,11 +55,20 @@
         }
 
         .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             font-size: 1.8rem;
             font-weight: 700;
             color: var(--primary);
             text-decoration: none;
             letter-spacing: 1px;
+        }
+
+        .logo img {
+            height: 45px;
+            width: auto;
+            object-fit: contain;
         }
 
         .header-right {
@@ -74,7 +83,7 @@
             margin-left: 20px;
             font-weight: 500;
             font-size: 1.1rem;
-            transition: color 0.3s;
+            transition: color 0.3s, background 0.3s;
         }
 
         .nav-links a:hover,
@@ -120,27 +129,6 @@
             max-width: 700px;
             margin: 0 auto;
             opacity: 0.9;
-        }
-
-        /* Mevcut .logo CSS'ini şununla değiştir ve .logo img kuralını ekle */
-        /* Mevcut .logo CSS'ini şununla değiştir ve .logo img kuralını ekle */
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            /* Logo ile yazı arasındaki boşluk */
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-            letter-spacing: 1px;
-            text-decoration: none;
-        }
-
-        .logo img {
-            height: 45px;
-            /* Logonun menüdeki yüksekliği */
-            width: auto;
-            object-fit: contain;
         }
 
         /* Yemek Kartları Gridi */
@@ -238,16 +226,54 @@
             letter-spacing: 0.5px;
         }
 
+        /* =========================================
+           MOBİL UYUMLULUK (RESPONSIVE DESIGN)
+           ========================================= */
         @media screen and (max-width: 900px) {
             header {
-                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 5%;
+            }
+
+            .header-right {
+                flex-direction: column;
+                width: 100%;
+                gap: 15px;
             }
 
             .nav-links {
-                display: none;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
             }
 
-            /* Mobilde menü gizli */
+            /* Telefonda menüleri buton formuna çevirdik */
+            .nav-links a {
+                margin: 0;
+                font-size: 0.95rem;
+                padding: 6px 12px;
+                background: rgba(0, 0, 0, 0.05);
+                border-radius: 20px;
+            }
+
+            body.dark-theme .nav-links a {
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .page-header {
+                padding: 40px 20px 30px;
+            }
+
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+
+            .food-grid {
+                padding: 0 5% 50px;
+                gap: 30px;
+            }
         }
     </style>
 </head>
@@ -281,7 +307,6 @@
         <!-- YEMEK 1: Testi Kebabı -->
         <div class="food-card">
             <div class="food-img-wrapper">
-                <!-- Fotoğrafın adını birebir kullandım -->
                 <img src="testikebabi.jpg" alt="Testi Kebabı">
             </div>
             <div class="food-info">
@@ -297,7 +322,6 @@
         <!-- YEMEK 2: Nohut Mayalı Nevşehir Simidi -->
         <div class="food-card">
             <div class="food-img-wrapper">
-                <!-- Fotoğrafın adını birebir kullandım -->
                 <img src="nevsehirsimidi.jpeg" alt="Nevşehir Simidi">
             </div>
             <div class="food-info">
@@ -312,7 +336,6 @@
         <!-- YEMEK 3: Çömlek Fasulyesi -->
         <div class="food-card">
             <div class="food-img-wrapper">
-                <!-- Fotoğrafın adını birebir kullandım -->
                 <img src="kurufasulye.jpg" alt="Çömlek Fasulyesi">
             </div>
             <div class="food-info">
