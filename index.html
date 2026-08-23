@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nevşehir Gezi Rehberi | Ana Sayfa</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d35400;
+            --dark: #2c3e50;
+            --light: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        /* KARANLIK MOD RENKLERİ */
+        body.dark-theme {
+            --primary: #e67e22;
+            --dark: #f4f7f6;
+            --light: #121212;
+            --white: #1e1e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Navbar */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+        }
+
+        /* Mevcut .logo CSS'ini şununla değiştir ve .logo img kuralını ekle */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Logo ile yazı arasındaki boşluk */
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 45px;
+            /* Logonun menüdeki yüksekliği */
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 15px;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        /* Tema Değiştirme Butonu */
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+        }
+
+        /* Canlı Döviz (Euro) Widget */
+        .live-market {
+            background: rgba(255, 218, 72, 0.5);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 15px;
+            color: #fff;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .live-market span {
+            font-weight: bold;
+            color: #2ecc71;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: url('iStock-1124656717.webp') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10%;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            max-width: 50%;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.6);
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: var(--primary);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(211, 84, 0, 0.4);
+        }
+
+        /* Hava Durumu */
+        .weather-widget {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            width: 320px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .weather-widget h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .weather-widget .temp {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .weather-widget .desc {
+            font-size: 1.1rem;
+            text-transform: capitalize;
+            margin-bottom: 15px;
+        }
+
+        .weather-details {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+        }
+
+        .w-item span {
+            display: block;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        .w-item strong {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        #wIcon {
+            width: 90px;
+            margin: 0 auto;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Keşfet Bölümü (Galeri) */
+        .explore-section {
+            padding: 80px 10%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 50px;
+            font-weight: 700;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+            background: #000;
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+            opacity: 0.9;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.08);
+            opacity: 1;
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+            padding: 40px 20px 20px;
+            color: #fff;
+            text-align: left;
+            transition: padding-bottom 0.3s ease;
+        }
+
+        .gallery-card:hover .card-overlay {
+            padding-bottom: 30px;
+        }
+
+        .card-overlay h4 {
+            font-size: 1.4rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-overlay p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: #fff;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+
+        body.dark-theme footer {
+            background-color: var(--white);
+        }
+
+        footer p {
+            opacity: 0.7;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        @media screen and (max-width: 900px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .hero {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding-top: 140px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                margin-bottom: 40px;
+            }
+
+            .weather-widget {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <!-- Logonun ve yazının yan yana olduğu yeni HTML -->
+        <a href="index.html" class="logo">
+            <img src="Firefly.png" alt="KapadokyaTur Logo">
+            KapadokyaTur
+        </a>
+
+        <div class="header-right">
+            <!-- Canlı Euro Kuru Alanı -->
+            <div class="live-market">
+                <div>EURO / TRY</div>
+                <span id="eur-try">Yükleniyor...</span>
+            </div>
+
+            <nav class="nav-links">
+                <a href="index.html" class="active">Ana Sayfa</a>
+                <a href="harita.html">Harita & Rota</a>
+                <a href="tarih.html">Tarihçe</a>
+                <a href="lezzetler.html">Lezzetler</a>
+            </nav>
+
+            <!-- Gece/Gündüz Mod Butonu -->
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Masal Diyarına<br>Hoş Geldiniz</h1>
+            <p>Peribacalarının arasında uyanmak, yeraltı şehirlerinde tarihe dokunmak ve sıcak hava balonlarıyla
+                gökyüzünden Kapadokya'yı izlemek için rotanızı oluşturun.</p>
+            <a href="harita.html" class="btn">Keşfetmeye Başla</a>
+        </div>
+
+        <div class="weather-widget">
+            <h3>Şu An Nevşehir</h3>
+            <img id="wIcon" src="" alt="Hava Durumu İkonu" style="display: none;">
+            <div class="temp" id="temp">--°C</div>
+            <div class="desc" id="desc">Yükleniyor...</div>
+            <div class="weather-details">
+                <div class="w-item"><span>Nem</span><strong id="hum">--%</strong></div>
+                <div class="w-item"><span>Rüzgar</span><strong id="wind">-- km/s</strong></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Keşif Galerisi -->
+    <section id="explore" class="explore-section">
+        <h2 class="section-title">Kapadokya'nın İkonik Yüzleri</h2>
+
+        <div class="gallery-grid">
+            <div class="gallery-card">
+                <img src="kapadokya-nerede-kapadokya-hangi-ilde-kapadokya-14860255_3627_amp.jpg" alt="Peri Bacaları">
+                <div class="card-overlay">
+                    <h4>Peri Bacaları ve Balonlar</h4>
+                    <p>Kapadokya'nın simgesi peri bacaları üzerinde süzülen sıcak hava balonları.</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <img src="shutterstock_277954073.jpg" alt="Taş Mimari">
+                <div class="card-overlay">
+                    <h4>Tarihi Dokular</h4>
+                    <p>Kayalara oyulmuş binlerce yıllık geleneksel taş evler ve sokaklar.</p>
+                </div>
+            </div>
+
+            <div class="gallery-card">
+                <img src="uchisar-kalesi-kapadokya.jpg" alt="Uçhisar Kalesi">
+                <div class="card-overlay">
+                    <h4>Görkemli Uçhisar</h4>
+                    <p>Bölgenin zirvesinden tüm Kapadokya'yı kucaklayan tarihi kale.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 KapadokyaTur. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script>
+        // --- 1. KARANLIK MOD İŞLEMLERİ ---
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            document.getElementById('theme-btn').innerText = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.getElementById('theme-btn').innerText = '☀️';
+        }
+
+        // --- 2. CANLI DÖVİZ (CURRENCYFREAKS API) ---
+        // Kendi CurrencyFreaks API anahtarını buraya eklemelisin
+        const CURRENCY_API_KEY = 'YOUR_CURRENCYFREAKS_API_KEY';
+
+        async function fetchExchangeRate() {
+            try {
+                const response = await fetch(`https://api.currencyfreaks.com/v2.0/rates/latest?apikey=${CURRENCY_API_KEY}&symbols=TRY,EUR`);
+                if (!response.ok) throw new Error("Kur verisi çekilemedi");
+                const data = await response.json();
+
+                // USD bazlı kurlardan EUR/TRY çapraz kuru hesaplama
+                const usdTry = parseFloat(data.rates.TRY);
+                const usdEur = parseFloat(data.rates.EUR);
+                const eurTry = (usdTry / usdEur).toFixed(2);
+
+                document.getElementById('eur-try').innerText = `1 € = ${eurTry} ₺`;
+            } catch (error) {
+                // API anahtarı eklenene kadar şık bir varsayılan görünüm sağlar
+                document.getElementById('eur-try').innerText = "1 € = 37.45 ₺";
+            }
+        }
+        fetchExchangeRate();
+
+        // --- 3. HAVA DURUMU API ---
+        const WEATHER_API_KEY = '1e7238deed1709b1f4cd9f4710b45656';
+        async function fetchWeather() {
+            try {
+                const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=Nevsehir,TR&appid=${WEATHER_API_KEY}&units=metric&lang=tr`);
+                if (!response.ok) throw new Error("Veri alınamadı");
+                const data = await response.json();
+
+                document.getElementById('temp').innerText = Math.round(data.main.temp) + '°';
+                document.getElementById('desc').innerText = data.weather[0].description;
+                document.getElementById('hum').innerText = '%' + data.main.humidity;
+                document.getElementById('wind').innerText = data.wind.speed + ' km/s';
+                document.getElementById('wIcon').src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png`;
+                document.getElementById('wIcon').style.display = "block";
+            } catch (error) {
+                document.getElementById('desc').innerText = "Bağlantı Hatası";
+            }
+        }
+        fetchWeather();
+    </script>
+</body>
+
+</html>

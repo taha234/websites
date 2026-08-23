@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nevşehir Gezi Rehberi | Ana Sayfa</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d35400;
+            --dark: #2c3e50;
+            --light: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section (Arka Plan: Balonlar) */
+        .hero {
+            height: 100vh;
+            /* Ana görselin buraya entegre edildi */
+            background: url('iStock-1124656717.webp') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10%;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--white);
+            max-width: 50%;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s, background 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            background: #e66b1a;
+        }
+
+        /* Hava Durumu Widget (Glassmorphism) */
+        .weather-widget {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            width: 320px;
+            text-align: center;
+            color: var(--white);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .weather-widget h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .weather-widget .temp {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .weather-widget .desc {
+            font-size: 1.1rem;
+            text-transform: capitalize;
+            margin-bottom: 15px;
+        }
+
+        .weather-details {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+        }
+
+        .w-item span {
+            display: block;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .w-item strong {
+            font-size: 1.1rem;
+        }
+
+        #wIcon {
+            width: 80px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Keşfet Bölümü (Diğer Fotoğrafların) */
+        .explore-section {
+            padding: 80px 10%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 50px;
+            font-weight: 700;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-card {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            position: relative;
+            cursor: pointer;
+            height: 350px;
+        }
+
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            padding: 30px 20px 20px;
+            color: var(--white);
+            text-align: left;
+            transform: translateY(20px);
+            opacity: 0.8;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-card:hover .card-overlay {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .card-overlay h4 {
+            font-size: 1.4rem;
+            margin-bottom: 5px;
+        }
+
+        .card-overlay p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media screen and (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding-top: 100px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+                margin-bottom: 40px;
+            }
+
+            .weather-widget {
+                width: 100%;
+                max-width: 350px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Üst Menü -->
+    <header>
+        <div class="logo">KapadokyaTur</div>
+        <nav class="nav-links">
+            <a href="#">Ana Sayfa</a>
+            <a href="harita.html">Harita & Rota</a> <!-- Harita sayfasına link -->
+        </nav>
+    </header>
+
+    <!-- Karşılama Ekranı ve Hava Durumu -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Masal Diyarına<br>Hoş Geldiniz</h1>
+            <p>Peribacalarının arasında uyanmak, yeraltı şehirlerinde tarihe dokunmak ve sıcak hava balonlarıyla
+                gökyüzünden Kapadokya'yı izlemek için rotanızı oluşturun.</p>
+            <a href="#explore" class="btn">Keşfetmeye Başla</a>
+        </div>
+
+        <!-- API Destekli Canlı Hava Durumu -->
+        <div class="weather-widget">
+            <h3>Şu An Nevşehir</h3>
+            <img id="wIcon" src="" alt="Hava Durumu İkonu" style="display: none; margin: 0 auto;">
+            <div class="temp" id="temp">--°C</div>
+            <div class="desc" id="desc">Yükleniyor...</div>
+            <div class="weather-details">
+                <div class="w-item">
+                    <span>Nem</span>
+                    <strong id="hum">--%</strong>
+                </div>
+                <div class="w-item">
+                    <span>Rüzgar</span>
+                    <strong id="wind">-- km/s</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Senin Çektiğin Diğer Fotoğrafların Sergilendiği Alan -->
+    <section id="explore" class="explore-section">
+        <h2 class="section-title">Kapadokya'nın İkonik Yüzleri</h2>
+
+        <div class="gallery-grid">
+            <!-- Görsel 1: Balonlar ve Kayalar -->
+            <div class="gallery-card">
+                <img src="kapadokya-nerede-kapadokya-hangi-ilde-kapadokya-14860255_3627_amp.jpg" alt="Kapadokya Vadisi">
+                <div class="card-overlay">
+                    <h4>Gökyüzü Şöleni</h4>
+                    <p>Her sabah gün doğumuyla başlayan görsel bir şölen.</p>
+                </div>
+            </div>
+
+            <!-- Görsel 2: Taş Evler ve Uçhisar Hissiyatı -->
+            <div class="gallery-card">
+                <img src="shutterstock_277954073.jpg" alt="Taş Mimari">
+                <div class="card-overlay">
+                    <h4>Tarihi Dokular</h4>
+                    <p>Kayalara oyulmuş binlerce yıllık yaşam alanları.</p>
+                </div>
+            </div>
+
+            <!-- Görsel 3: Uçhisar Kalesi -->
+            <div class="gallery-card">
+                <img src="uchisar-kalesi-kapadokya.jpg" alt="Uçhisar Kalesi">
+                <div class="card-overlay">
+                    <h4>Uçhisar Kalesi</h4>
+                    <p>Bölgenin zirvesinden tüm Kapadokya'yı kucaklayın.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // OpenWeatherMap API Entegrasyonu (Senin API Anahtarın)
+        const API_KEY = '1e7238deed1709b1f4cd9f4710b45656';
+
+        async function fetchWeather() {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=Nevsehir,TR&appid=${API_KEY}&units=metric&lang=tr`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Hava durumu verisi alınamadı");
+
+                const data = await response.json();
+
+                // HTML'i güncelle
+                document.getElementById('temp').innerText = Math.round(data.main.temp) + '°';
+                document.getElementById('desc').innerText = data.weather[0].description;
+                document.getElementById('hum').innerText = '%' + data.main.humidity;
+                document.getElementById('wind').innerText = data.wind.speed + ' km/s';
+
+                // İkonu ayarla
+                const iconCode = data.weather[0].icon;
+                const iconImg = document.getElementById('wIcon');
+                iconImg.src = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+                iconImg.style.display = "block";
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('desc').innerText = "Bağlantı Hatası";
+            }
+        }
+
+        // Sayfa yüklendiğinde hava durumunu getir
+        fetchWeather();
+    </script>
+</body>
+
+</html>

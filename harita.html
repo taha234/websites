@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nevşehir Keşif Haritası | KapadokyaTur</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary: #d35400;
+            --dark: #2c3e50;
+            --bg: #f4f7f6;
+            --white: #ffffff;
+        }
+
+        /* KARANLIK MOD RENKLERİ */
+        body.dark-theme {
+            --primary: #e67e22;
+            --dark: #f4f7f6;
+            --bg: #121212;
+            --white: #1e1e1e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--dark);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Ortak Header */
+        header {
+            background: var(--white);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+
+        /* Mevcut .logo CSS'ini şununla değiştir ve .logo img kuralını ekle */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Logo ile yazı arasındaki boşluk */
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 45px;
+            /* Logonun menüdeki yüksekliği */
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Header Sağ Taraf (Menü + Tema Butonu) */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        /* Tema Değiştirme Butonu */
+        .theme-toggle {
+            background: transparent;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sol Panel (Sidebar) */
+        .places-panel {
+            width: 450px;
+            background: var(--white);
+            overflow-y: auto;
+            padding: 30px 20px;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            transition: background-color 0.3s;
+        }
+
+        /* Özel Scrollbar (Modern Görünüm) */
+        .places-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .places-panel::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+
+        .places-panel::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .places-panel::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        .panel-header {
+            margin-bottom: 10px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(150, 150, 150, 0.2);
+        }
+
+        .panel-header h2 {
+            color: var(--dark);
+            font-size: 1.8rem;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        .panel-header p {
+            font-size: 0.95rem;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Yer Kartları Tasarımı */
+        .place-card {
+            background: var(--bg);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+        }
+
+        .place-card:hover,
+        .place-card.active {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(211, 84, 0, 0.15);
+            border-color: var(--primary);
+            background: var(--white);
+        }
+
+        .card-image-wrapper {
+            width: 100%;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+
+        .place-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .place-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .place-info {
+            padding: 20px;
+        }
+
+        .place-info h3 {
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .place-info p {
+            font-size: 0.9rem;
+            color: #888;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .distance-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(211, 84, 0, 0.1);
+            color: var(--primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Sağ Taraf: Harita */
+        #map {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Karanlık modda harita renklerini hafifçe karartmak için ekstra dokunuş (opsiyonel) */
+        body.dark-theme .leaflet-layer {
+            filter: brightness(0.8) contrast(1.2);
+        }
+
+        footer {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 0.85rem;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-theme footer {
+            background-color: var(--white);
+            color: var(--dark);
+        }
+
+        footer p {
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+        }
+
+        @media screen and (max-width: 800px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-container {
+                flex-direction: column-reverse;
+            }
+
+            .places-panel {
+                width: 100%;
+                height: 50vh;
+                padding: 20px 15px;
+            }
+
+            #map {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <!-- Logonun ve yazının yan yana olduğu yeni HTML -->
+        <a href="index.html" class="logo">
+            <img src="Firefly.png" alt="KapadokyaTur Logo">
+            KapadokyaTur
+        </a>
+
+        <div class="header-right">
+            <nav class="nav-links">
+                <a href="index.html">Ana Sayfa</a>
+                <a href="harita.html" class="active">Harita & Rota</a>
+                <a href="tarih.html">Tarihçe</a>
+                <a href="lezzetler.html">Lezzetler</a>
+            </nav>
+            <!-- Gece/Gündüz Mod Butonu -->
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙</button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <div class="places-panel">
+            <div class="panel-header">
+                <h2>Kapadokya'yı Keşfet</h2>
+                <p>İkonik noktalar ve Nevşehir merkeze kuş uçuşu uzaklıkları.</p>
+            </div>
+            <div id="placesList"></div>
+        </div>
+        <div id="map"></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 KapadokyaTur. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // --- 1. KARANLIK MOD İŞLEMLERİ ---
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            document.getElementById('theme-btn').innerText = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Sayfa açıldığında eski tercihi kontrol et (Diğer sayfalardan geçiş yapıldığında tema korunur)
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.getElementById('theme-btn').innerText = '☀️';
+        }
+
+        // --- 2. HARİTA VE LOKASYON İŞLEMLERİ ---
+        const nevsehirCenter = { lat: 38.6253, lng: 34.7122 };
+        const locations = [
+            { id: 1, name: "Avanos Sallanan Köprü", desc: "Kızılırmak üzerinde yer alan meşhur asma köprü.", image: "avanossallanankopru.jpg", lat: 38.7153, lng: 34.8491 },
+            { id: 2, name: "Göreme", desc: "Kapadokya'nın kalbi, peribacalarının iç içe olduğu eşsiz kasaba.", image: "göreme.webp", lat: 38.6431, lng: 34.8290 },
+            { id: 3, name: "Göreme Açık Hava Müzesi", desc: "UNESCO miras alanı manastırlar ve tarihi kiliseler.", image: "göremeaçıkhavamüzesi.webp", lat: 38.6402, lng: 34.8453 },
+            { id: 4, name: "Kaymaklı Yeraltı Şehri", desc: "Binlerce insanın aynı anda saklanabildiği yeraltı şehri.", image: "kaymaklıyeraltışehir.jpg", lat: 38.4611, lng: 34.7522 },
+            { id: 5, name: "Üç Güzeller", desc: "Kapadokya'nın sembolü efsanevi üçlü şapkalı peribacası.", image: "ucguzeller.jpg", lat: 38.6272, lng: 34.8601 },
+            { id: 6, name: "Zelve Açık Hava Müzesi", desc: "Kapadokya'nın en eski yerleşim yerlerinden biri.", image: "zelve-6.jpg", lat: 38.6685, lng: 34.8633 }
+        ];
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            return (R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)))).toFixed(1);
+        }
+
+        const map = L.map('map', { zoomControl: false }).setView([nevsehirCenter.lat, nevsehirCenter.lng], 11);
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+        L.marker([nevsehirCenter.lat, nevsehirCenter.lng]).addTo(map).bindPopup('<strong style="color:#d35400;">Nevşehir Merkez</strong>');
+
+        const placesList = document.getElementById('placesList');
+        const markers = {};
+
+        locations.forEach(place => {
+            const distance = calculateDistance(nevsehirCenter.lat, nevsehirCenter.lng, place.lat, place.lng);
+            placesList.innerHTML += `
+                <div class="place-card" id="card-${place.id}" onclick="focusPlace(${place.id}, ${place.lat}, ${place.lng})">
+                    <div class="card-image-wrapper"><img src="${place.image}" alt="${place.name}"></div>
+                    <div class="place-info">
+                        <h3>${place.name}</h3><p>${place.desc}</p>
+                        <div class="distance-badge"><span>📍</span> Merkeze uzaklık: ~${distance} km</div>
+                    </div>
+                </div>`;
+            const marker = L.marker([place.lat, place.lng]).addTo(map);
+            marker.bindPopup(`<b>${place.name}</b><br>Merkeze ${distance} km`);
+            markers[place.id] = marker;
+        });
+
+        function focusPlace(id, lat, lng) {
+            map.flyTo([lat, lng], 15, { duration: 1.8 });
+            markers[id].openPopup();
+            document.querySelectorAll('.place-card').forEach(card => card.classList.remove('active'));
+            document.getElementById(`card-${id}`).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

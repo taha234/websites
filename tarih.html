@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nevşehir Tarihi | KapadokyaTur</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d35400;
+            --dark: #2c3e50;
+            --light: #f4f7f6;
+            --white: #ffffff;
+            --text-color: #4a5568;
+        }
+
+        /* KARANLIK MOD RENKLERİ */
+        body.dark-theme {
+            --primary: #e67e22;
+            --dark: #f4f7f6;
+            --light: #121212;
+            --white: #1e1e1e;
+            --text-color: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--text-color);
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Navbar - Beyaz Tema */
+        header {
+            background: var(--white);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: background-color 0.3s;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+        /* Header Sağ Taraf (Menü + Tema Butonu) */
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        /* Tema Değiştirme Butonu */
+        .theme-toggle {
+            background: transparent;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            color: var(--primary);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .theme-toggle:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* Sayfa Başlığı */
+        .page-header {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(rgba(211, 84, 0, 0.05), rgba(244, 247, 246, 1));
+            transition: background 0.3s;
+        }
+
+        body.dark-theme .page-header {
+            background: linear-gradient(rgba(230, 126, 34, 0.08), rgba(18, 18, 18, 1));
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            transition: color 0.3s;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            color: var(--text-color);
+            opacity: 0.9;
+        }
+
+        /* Tarihçe İçerik Konteyneri */
+        .history-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        /* Zigzag (Z) Düzeni Row */
+        .history-row {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-bottom: 80px;
+        }
+
+        .history-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .history-text {
+            flex: 1;
+        }
+
+        .history-text h2 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .history-text h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .history-text p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .history-image {
+            flex: 1;
+            position: relative;
+        }
+
+        .history-image img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            transition: transform 0.4s ease;
+            filter: sepia(0.3) contrast(1.1);
+            /* Nostaljik fotoğraflara hafif sıcak ton */
+        }
+
+        .history-image img:hover {
+            transform: scale(1.02);
+        }
+
+        .history-image .caption {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        body.dark-theme .history-image .caption {
+            color: #94a3b8;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            text-align: center;
+            padding: 30px 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Mevcut .logo CSS'ini şununla değiştir ve .logo img kuralını ekle */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            /* Logo ile yazı arasındaki boşluk */
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 45px;
+            /* Logonun menüdeki yüksekliği */
+            width: auto;
+            object-fit: contain;
+        }
+
+        body.dark-theme footer {
+            background-color: var(--white);
+            color: var(--dark);
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        @media screen and (max-width: 900px) {
+            header {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            /* Mobilde menüyü şimdilik gizledik */
+
+            .history-row,
+            .history-row:nth-child(even) {
+                flex-direction: column;
+                gap: 30px;
+                text-align: center;
+                margin-bottom: 60px;
+            }
+
+            .history-text h2::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Menü -->
+    <header>
+        <!-- Logonun ve yazının yan yana olduğu yeni HTML -->
+        <a href="index.html" class="logo">
+            <img src="Firefly.png" alt="KapadokyaTur Logo">
+            KapadokyaTur
+        </a>
+        <div class="header-right">
+            <nav class="nav-links">
+                <a href="index.html">Ana Sayfa</a>
+                <a href="harita.html">Harita & Rota</a>
+                <a href="tarih.html" class="active">Tarihçe</a>
+                <a href="lezzetler.html">Lezzetler</a>
+            </nav>
+            <!-- Gece/Gündüz Mod Butonu -->
+            <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙</button>
+        </div>
+    </header>
+
+    <!-- Başlık Alanı -->
+    <section class="page-header">
+        <h1>Nevşehir'in Köklü Tarihi</h1>
+        <p>M.Ö. 5000 yılından Cumhuriyet'e; Hititler, Asurlular, Osmanlı ve Kurtuluş Savaşı dönemlerinde Kapadokya'nın
+            kalbi.</p>
+    </section>
+
+    <!-- Tarihçe İçeriği -->
+    <div class="history-container">
+
+        <!-- Dönem 1 -->
+        <div class="history-row">
+            <div class="history-text">
+                <h2>İlk Çağlar ve Asur Kolonileri (M.Ö. 6500 - 1750)</h2>
+                <p>Bölgenin ilk sakinleri Hititler olup, bu bölgeye "Nissa" ismini verdiler. Kapadokya'ya ise Asurlular
+                    "Katputuka" ismini vermişlerdir. Nevşehir ilinin en eski yerleşim yeri Gülşehir ilçesi Civelek
+                    Mağarası’nda ve Avanos Zank Höyük'te görülür.</p>
+                <p>M.Ö. 2000-1750 yılları arasında Mezopotamyalı Asurlu tacirler Anadolu'da ticari koloniler kurarak
+                    Karum-Hattuş'u oluşturmuşlardır. Anadolu'ya yazıyı getirenler de bu tacirlerdir; 'Kapadokya
+                    Tabletleri' olarak bilinen çivi yazılı metinler Anadolu'nun ticari ve hukuki temellerini aydınlatır.
+                </p>
+            </div>
+            <div class="history-image">
+                <img src="MTY1MmUzMzJmNzgxNmY_8.jpg" alt="Tarihi Çeşme ve Peribacası">
+                <div class="caption">Eski çağlardan bugüne uzanan taş işçiliği ve peribacaları.</div>
+            </div>
+        </div>
+
+        <!-- Dönem 2 -->
+        <div class="history-row">
+            <div class="history-text">
+                <h2>Muşkara'dan Nevşehir'e (Osmanlı Dönemi)</h2>
+                <p>1071 Malazgirt Zaferi'nden sonra Türkler bölgeye gelerek eski köye "Muşkara" ismini verdiler. Uzun
+                    yıllar Osmanlı idaresinde barış içinde yaşayan yöre halkı, zaman zaman Celâli isyanlarından
+                    etkilendi.</p>
+                <p>Muşkara'nın asıl altın çağı Lale Devri sadrazamı Nevşehirli Damat İbrahim Paşa zamanında (1718-1730)
+                    yaşanmıştır. O dönem 10-12 hanelik küçük bir köy olan Muşkara, genişletilerek imar edilmiş ve "Yeni
+                    Şehir" manasına gelen "Nevşehir" adını alarak Niğde sancağına bağlanmıştır.</p>
+            </div>
+            <div class="history-image">
+                <img src="MTY1MmUzMzJmNzgxNmY.jpg" alt="Eski Nevşehir Görünümü">
+                <div class="caption">Eski Nevşehir yerleşimi ve tepedeki kalesi.</div>
+            </div>
+        </div>
+
+        <!-- Dönem 3 -->
+        <div class="history-row">
+            <div class="history-text">
+                <h2>Kurtuluş Savaşı Yılları ve Atatürk</h2>
+                <p>Mondros Mütarekesi günlerinde Orta Anadolu doğrudan işgal görmese de, 4 Eylül 1919'da toplanan Sivas
+                    Kongresi'ne Nevşehir adına Dellalzade Hacı Osman Efendi katılmıştır.</p>
+                <p>Milli Mücadele'nin en kritik günlerinde, 22 Aralık 1919'da Mustafa Kemal Paşa Hacıbektaş'a gelerek
+                    Çelebi Cemalettin Efendi ve Salih Niyazi Baba ile görüşmüştür. Bu tarihi görüşmeyle bölge halkı
+                    Milli Mücadele saflarına tam destek vermiştir.</p>
+            </div>
+            <div class="history-image">
+                <img src="MTY1MmUzMzJmNzgxNmY_4.jpg" alt="Mustafa Kemal Atatürk Hacıbektaş'ta">
+                <div class="caption">22 Aralık 1919 - Mustafa Kemal Paşa'nın Hacıbektaş ziyareti.</div>
+            </div>
+        </div>
+
+        <!-- Dönem 4 -->
+        <div class="history-row">
+            <div class="history-text">
+                <h2>Cumhuriyet Dönemi ve Gelişim</h2>
+                <p>Cumhuriyetin ilanı sonrası Niğde'ye bağlı bir ilçe olan Nevşehir, 20 Temmuz 1954 tarihinde 6429
+                    sayılı yasa ile il statüsüne kavuştu. Ürgüp, Avanos, Hacıbektaş ve Gülşehir gibi ilçeler Nevşehir'e
+                    bağlandı.</p>
+                <p>Bu yılların en unutulmaz simalarından biri de, yöre halkına ve çocuklara okuma sevgisini aşılamak
+                    için kitapları sandıklara doldurup köy köy gezen "Eşekli Kütüphaneci" Mustafa Güzelgöz'dür.
+                    Cumhuriyet aydınlanmasının bu eşsiz figürü, Nevşehir'in eğitim tarihine damga vurmuştur.</p>
+            </div>
+            <div class="history-image">
+                <img src="MTY1MmUzMzJmNzgxNmY_2.jpg" alt="Eşekli Kütüphaneci Mustafa Güzelgöz">
+                <div class="caption">Nevşehir'in köylerine kitap taşıyan meşhur "Eşekli Kütüphaneci".</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 KapadokyaTur. Tüm hakları saklıdır.</p>
+    </footer>
+
+    <!-- Karanlık Mod Scripti -->
+    <script>
+        // Tema Değiştirme Fonksiyonu
+        function toggleTheme() {
+            document.body.classList.toggle('dark-theme');
+            const isDark = document.body.classList.contains('dark-theme');
+            document.getElementById('theme-btn').innerText = isDark ? '☀️' : '🌙';
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Sayfa açıldığında diğer sayfalardaki tercihi hatırla
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.getElementById('theme-btn').innerText = '☀️';
+        }
+    </script>
+</body>
+
+</html>
